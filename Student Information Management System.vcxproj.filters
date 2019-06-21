@@ -39,6 +39,9 @@
     <ClInclude Include="Management.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="AddStudent.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Student Information Management System.cpp">
@@ -54,6 +57,9 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="Management.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="AddStudent.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

@@ -11,7 +11,7 @@ class CStudentInformationManagementSystemDlg : public CDialogEx
 // 构造
 public:
 	CStudentInformationManagementSystemDlg(CWnd* pParent = nullptr);	// 标准构造函数
-
+	void LoadFile(CListCtrl* pList);
 // 对话框数据
 #ifdef AFX_DESIGN_TIME
 	enum { IDD = IDD_STUDENTINFORMATIONMANAGEMENTSYSTEM_DIALOG };
@@ -31,4 +31,12 @@ protected:
 	DECLARE_MESSAGE_MAP()
 public:
 	
+	afx_msg void OnBnClickedAddButton();
+	afx_msg void OnBnClickedDeleteButton();
+	afx_msg void OnBnClickedChangeButton();
+	afx_msg void OnBnClickedDataButton();
+	afx_msg void OnBnClickedFileSaveButton();
+	afx_msg void OnBnClickedFileLoadButton();
+	afx_msg void OnBnClickedSearchButton();
+	afx_msg void OnBnClickedSortButton();
 };

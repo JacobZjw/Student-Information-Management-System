@@ -2,9 +2,9 @@
 class Management
 {
 public:
-	void Add();
-	void Delete();
-	void Change();
+	void AddStudent();
+	void DeleteStudent();
+	void ChangeStudent();
 	void Sort();
 	void Save();
 	void Load();

@@ -9,7 +9,7 @@ Student ::~Student()
 {
 
 }
-float Student::Sum()
-{
-	return sum = math + program;
-}
+//char* Student::Sum()
+//{
+//	
+//}

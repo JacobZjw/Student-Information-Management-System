@@ -7,6 +7,8 @@
 #include "Student Information Management System.h"
 #include "Student Information Management SystemDlg.h"
 #include "afxdialogex.h"
+#include "AddStudent.h"
+#include "Student.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -31,6 +33,14 @@ void CStudentInformationManagementSystemDlg::DoDataExchange(CDataExchange* pDX)
 BEGIN_MESSAGE_MAP(CStudentInformationManagementSystemDlg, CDialogEx)
 	ON_WM_PAINT()
 	ON_WM_QUERYDRAGICON()
+	ON_BN_CLICKED(IDC_ADD_BUTTON, &CStudentInformationManagementSystemDlg::OnBnClickedAddButton)
+	ON_BN_CLICKED(IDC_DELETE_BUTTON, &CStudentInformationManagementSystemDlg::OnBnClickedDeleteButton)
+	ON_BN_CLICKED(IDC_CHANGE_BUTTON, &CStudentInformationManagementSystemDlg::OnBnClickedChangeButton)
+	ON_BN_CLICKED(IDC_DATA_BUTTON, &CStudentInformationManagementSystemDlg::OnBnClickedDataButton)
+	ON_BN_CLICKED(IDC_FILE_SAVE_BUTTON, &CStudentInformationManagementSystemDlg::OnBnClickedFileSaveButton)
+	ON_BN_CLICKED(IDC_FILE_LOAD_BUTTON, &CStudentInformationManagementSystemDlg::OnBnClickedFileLoadButton)
+	ON_BN_CLICKED(IDC_SEARCH_BUTTON, &CStudentInformationManagementSystemDlg::OnBnClickedSearchButton)
+	ON_BN_CLICKED(IDC_SORT_BUTTON, &CStudentInformationManagementSystemDlg::OnBnClickedSortButton)
 END_MESSAGE_MAP()
 
 
@@ -54,14 +64,15 @@ BOOL CStudentInformationManagementSystemDlg::OnInitDialog()
 
 	//设置数据显示区
 	CListCtrl* pList = (CListCtrl*)GetDlgItem(IDC_LIST);
-	pList->InsertColumn(5, "姓名", LVCFMT_CENTER, 100);
-	pList->InsertColumn(1, "学号", LVCFMT_CENTER, 110);
-	pList->InsertColumn(2, "高等数学", LVCFMT_CENTER, 100);
-	pList->InsertColumn(3, "课程设计", LVCFMT_CENTER, 100);
-	pList->InsertColumn(4, "总分", LVCFMT_CENTER, 100);
+	pList->InsertColumn(1, "姓名", LVCFMT_CENTER, 80);
+	pList->InsertColumn(2, "性别", LVCFMT_CENTER, 50);
+	pList->InsertColumn(3, "学号", LVCFMT_CENTER, 100);
+	pList->InsertColumn(4, "高等数学", LVCFMT_CENTER, 100);
+	pList->InsertColumn(5, "课程设计", LVCFMT_CENTER, 100);
+	pList->InsertColumn(6, "总分", LVCFMT_CENTER, 80);
 
 	//设置排序选择按钮
-	CComboBox* pComb = (CComboBox*)GetDlgItem(IDC_SORTCOMBO);   //设置（IDC_SORTCOMBO）CComboBox控件
+	CComboBox* pComb = (CComboBox*)GetDlgItem(IDC_SORT_COMBO);  
 	pComb->AddString("学号");
 	pComb->AddString("高数");
 	pComb->AddString("课设");
@@ -108,3 +119,86 @@ HCURSOR CStudentInformationManagementSystemDlg::OnQueryDragIcon()
 	return static_cast<HCURSOR>(m_hIcon);
 }
 
+
+//添加成员按钮
+void CStudentInformationManagementSystemDlg::OnBnClickedAddButton()
+{
+	// TODO: 在此添加控件通知处理程序代码
+	AddStudent temp;
+	if (IDCANCEL == temp.DoModal())
+	{
+		CListCtrl* pList = (CListCtrl*)GetDlgItem(IDD_STUDENTINFORMATIONMANAGEMENTSYSTEM_DIALOG);  //关闭IDD_StudentSpecificAddDlg添加窗口，读取储存学生成绩的文件刷新学生成绩管理系统窗口
+		CStudentInformationManagementSystemDlg::LoadFile(pList);
+		OnBnClickedSortButton();//排序函数
+	}
+}
+
+
+//删除成员按钮
+void CStudentInformationManagementSystemDlg::OnBnClickedDeleteButton()
+{
+	// TODO: 在此添加控件通知处理程序代码
+}
+
+//修改数据按钮
+void CStudentInformationManagementSystemDlg::OnBnClickedChangeButton()
+{
+	// TODO: 在此添加控件通知处理程序代码
+}
+
+//数据分析按钮
+void CStudentInformationManagementSystemDlg::OnBnClickedDataButton()
+{
+	// TODO: 在此添加控件通知处理程序代码
+}
+
+//导出数据按钮
+void CStudentInformationManagementSystemDlg::OnBnClickedFileSaveButton()
+{
+	// TODO: 在此添加控件通知处理程序代码
+}
+
+//导入数据按钮
+void CStudentInformationManagementSystemDlg::OnBnClickedFileLoadButton()
+{
+	// TODO: 在此添加控件通知处理程序代码
+}
+
+//查找按钮
+void CStudentInformationManagementSystemDlg::OnBnClickedSearchButton()
+{
+	// TODO: 在此添加控件通知处理程序代码
+}
+
+//排序按钮
+void CStudentInformationManagementSystemDlg::OnBnClickedSortButton()
+{
+	// TODO: 在此添加控件通知处理程序代码
+	CComboBox* pComb = (CComboBox*)GetDlgItem(IDD_STUDENTINFORMATIONMANAGEMENTSYSTEM_DIALOG);
+	int nSel = pComb->GetCurSel();
+	//SortStudent(nSel);//排序函数还没写
+
+}
+
+void CStudentInformationManagementSystemDlg::LoadFile(CListCtrl* pList)//这部分有待斟酌
+{
+	CFile file;
+	if (!file.Open("C:\\Users\\17810\\Desktop\\studentfile.dat", CFile::modeRead | CFile::shareDenyNone))
+	{
+		AfxMessageBox("添加失败，文件打不开！");
+		return;
+	}
+	pList->DeleteAllItems();
+	Student u;
+	int i = 0;
+	while (file.Read(&u, sizeof(u)) == sizeof(u))
+	{
+		pList->InsertItem(i, u.ID);
+		pList->SetItemText(i, 1, u.name);
+		pList->SetItemText(i, 2, u.math);
+		pList->SetItemText(i, 3, u.program);
+		pList->SetItemText(i, 4, u.sum);
+		i++;
+	}
+	file.Close();
+}

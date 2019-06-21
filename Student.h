@@ -5,12 +5,12 @@ public:
 	Student();
 	~Student();
 	char name[20];
-	int ID;
+	char ID[20];
 	bool gender;
-	float math;
-	float program;
-	float sum;
-	float Sum();
+	char math[5] = {0};
+	char program[5] = {0};
+	char sum[5] = { 0 };
+	char* Sum();
 	friend class Management;
 };
 
