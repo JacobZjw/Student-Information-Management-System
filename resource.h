@@ -16,7 +16,6 @@
 #define IDC_SEARCH_EDIT                 1022
 #define IDC_SEARCH_BUTTON               1023
 #define IDC_LIST                        1024
-#define IDC_NAME_EDIT                   1025
 #define IDC_MAN                         1026
 #define IDC_WOMEN                       1027
 #define IDC_ID_EDIT                     1029
@@ -26,6 +25,7 @@
 #define IDC_FILE_LOAD_BUTTON            1033
 #define ID_ADD_STUDENT_SAVE             1034
 #define IDC_GENDER                      1035
+#define IDC_NAME_EDIT                   1036
 
 // Next default values for new objects
 // 
@@ -33,7 +33,7 @@
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        134
 #define _APS_NEXT_COMMAND_VALUE         32771
-#define _APS_NEXT_CONTROL_VALUE         1036
+#define _APS_NEXT_CONTROL_VALUE         1037
 #define _APS_NEXT_SYMED_VALUE           101
 #endif
 #endif

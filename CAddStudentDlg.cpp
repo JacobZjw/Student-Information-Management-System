@@ -3,49 +3,49 @@
 
 #include "pch.h"
 #include "Student Information Management System.h"
-#include "AddStudent.h"
+#include "CAddStudentDlg.h"
 #include "afxdialogex.h"
 #include "Student.h"
-
+#include "Management.h"
 
 // AddStudent 对话框
 
-IMPLEMENT_DYNAMIC(AddStudent, CDialogEx)
+IMPLEMENT_DYNAMIC(CAddStudentDlg, CDialogEx)
 
-AddStudent::AddStudent(CWnd* pParent /*=nullptr*/)
+CAddStudentDlg::CAddStudentDlg(CWnd* pParent /*=nullptr*/)
 	: CDialogEx(IDD_ADD_DIALOG, pParent)
 {
 
 }
 
-AddStudent::~AddStudent()
+CAddStudentDlg::~CAddStudentDlg()
 {
 }
 
-void AddStudent::DoDataExchange(CDataExchange* pDX)
+void CAddStudentDlg::DoDataExchange(CDataExchange* pDX)
 {
 	CDialogEx::DoDataExchange(pDX);
 }
 
 
-BEGIN_MESSAGE_MAP(AddStudent, CDialogEx)
-	ON_BN_CLICKED(ID_ADD_STUDENT_SAVE, &AddStudent::OnBnClickedAddStudentSave)
+BEGIN_MESSAGE_MAP(CAddStudentDlg, CDialogEx)
+	ON_BN_CLICKED(ID_ADD_STUDENT_SAVE, &CAddStudentDlg::OnBnClickedAddStudentSave)
 END_MESSAGE_MAP()
 
 
 // AddStudent 消息处理程序
 
 
-void AddStudent::OnBnClickedAddStudentSave()
+void CAddStudentDlg::OnBnClickedAddStudentSave()
 {
 	// TODO: 在此添加控件通知处理程序代码
 	Student temp;
 	GetDlgItemText(IDC_ID_EDIT, temp.ID, sizeof(temp.ID));  //将学号编辑框的内容写入u.sId
 	GetDlgItemText(IDC_NAME_EDIT, temp.name, sizeof(temp.name));  //将姓名编辑框的内容写入u.sName
 	if (IDC_MAN == GetCheckedRadioButton(IDC_MAN, IDC_WOMEN))
-		temp.gender = true;
+		temp.gender=true;
 	else
-		temp.gender = false;
+		temp.gender=false;
 	GetDlgItemText(IDC_MATH_EDIT, temp.math, sizeof(temp.math));  //将高数编辑框的内容写入u.sHigher_math
 	GetDlgItemText(IDC_PROGRAM_EDIT, temp.program, sizeof(temp.program));  //将C++课设编辑框的内容写入u.sC_program
 	CFile file;

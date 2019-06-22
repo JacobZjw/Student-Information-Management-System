@@ -7,7 +7,7 @@
 #include "Student Information Management System.h"
 #include "Student Information Management SystemDlg.h"
 #include "afxdialogex.h"
-#include "AddStudent.h"
+#include "CAddStudentDlg.h"
 #include "Student.h"
 
 #ifdef _DEBUG
@@ -28,6 +28,8 @@ CStudentInformationManagementSystemDlg::CStudentInformationManagementSystemDlg(C
 void CStudentInformationManagementSystemDlg::DoDataExchange(CDataExchange* pDX)
 {
 	CDialogEx::DoDataExchange(pDX);
+	DDX_Control(pDX, IDC_LIST, m_List);
+	DDX_Control(pDX, IDC_SORT_COMBO, m_Combo);
 }
 
 BEGIN_MESSAGE_MAP(CStudentInformationManagementSystemDlg, CDialogEx)
@@ -63,22 +65,25 @@ BOOL CStudentInformationManagementSystemDlg::OnInitDialog()
 	SetWindowText(str);
 
 	//设置数据显示区
-	CListCtrl* pList = (CListCtrl*)GetDlgItem(IDC_LIST);
-	pList->InsertColumn(1, "姓名", LVCFMT_CENTER, 80);
-	pList->InsertColumn(2, "性别", LVCFMT_CENTER, 50);
-	pList->InsertColumn(3, "学号", LVCFMT_CENTER, 100);
-	pList->InsertColumn(4, "高等数学", LVCFMT_CENTER, 100);
-	pList->InsertColumn(5, "课程设计", LVCFMT_CENTER, 100);
-	pList->InsertColumn(6, "总分", LVCFMT_CENTER, 80);
+	
+	m_List.SetExtendedStyle(LVS_EX_FULLROWSELECT | LVS_EX_GRIDLINES);//整行选择、网格线
+	m_List.InsertColumn(1, "姓名", LVCFMT_CENTER, 80);
+	m_List.InsertColumn(2, "性别", LVCFMT_CENTER, 50);
+	m_List.InsertColumn(3, "学号", LVCFMT_CENTER, 100);
+	m_List.InsertColumn(4, "高等数学", LVCFMT_CENTER, 100);
+	m_List.InsertColumn(5, "课程设计", LVCFMT_CENTER, 100);
+	m_List.InsertColumn(6, "总分", LVCFMT_CENTER, 80);
+	//排序函数
+
+	//读取文件函数
+	LoadFile(&m_List);
 
 	//设置排序选择按钮
-	CComboBox* pComb = (CComboBox*)GetDlgItem(IDC_SORT_COMBO);  
-	pComb->AddString("学号");
-	pComb->AddString("高数");
-	pComb->AddString("课设");
-	pComb->AddString("总分");
-
-	
+	m_Combo.AddString(_T("总分"));
+	m_Combo.AddString(_T("课设"));
+	m_Combo.AddString(_T("高数"));
+	m_Combo.AddString(_T("学号"));
+	int nsel = m_Combo.SetCurSel(2);
 	
 	return TRUE;  // 除非将焦点设置到控件，否则返回 TRUE
 }
@@ -124,7 +129,7 @@ HCURSOR CStudentInformationManagementSystemDlg::OnQueryDragIcon()
 void CStudentInformationManagementSystemDlg::OnBnClickedAddButton()
 {
 	// TODO: 在此添加控件通知处理程序代码
-	AddStudent temp;
+	CAddStudentDlg temp;
 	if (IDCANCEL == temp.DoModal())
 	{
 		CListCtrl* pList = (CListCtrl*)GetDlgItem(IDD_STUDENTINFORMATIONMANAGEMENTSYSTEM_DIALOG);  //关闭IDD_StudentSpecificAddDlg添加窗口，读取储存学生成绩的文件刷新学生成绩管理系统窗口
@@ -137,7 +142,20 @@ void CStudentInformationManagementSystemDlg::OnBnClickedAddButton()
 //删除成员按钮
 void CStudentInformationManagementSystemDlg::OnBnClickedDeleteButton()
 {
-	// TODO: 在此添加控件通知处理程序代码
+	POSITION pos = m_List.GetFirstSelectedItemPosition();//没有删除文件
+	if (pos == NULL)
+	{
+		AfxMessageBox(_T("请选择要删除的成员！"));
+		return;
+	}
+	else
+	{
+		while (pos)
+		{
+			int nItem = m_List.GetNextSelectedItem(pos);
+			m_List.DeleteItem(nItem);
+		}
+	}
 }
 
 //修改数据按钮
@@ -180,7 +198,7 @@ void CStudentInformationManagementSystemDlg::OnBnClickedSortButton()
 
 }
 
-void CStudentInformationManagementSystemDlg::LoadFile(CListCtrl* pList)//这部分有待斟酌
+void CStudentInformationManagementSystemDlg::LoadFile(CListCtrl* pList)
 {
 	CFile file;
 	if (!file.Open("C:\\Users\\17810\\Desktop\\studentfile.dat", CFile::modeRead | CFile::shareDenyNone))
@@ -193,11 +211,15 @@ void CStudentInformationManagementSystemDlg::LoadFile(CListCtrl* pList)//这部�
 	int i = 0;
 	while (file.Read(&u, sizeof(u)) == sizeof(u))
 	{
-		pList->InsertItem(i, u.ID);
-		pList->SetItemText(i, 1, u.name);
-		pList->SetItemText(i, 2, u.math);
-		pList->SetItemText(i, 3, u.program);
-		pList->SetItemText(i, 4, u.sum);
+		pList->InsertItem(i, u.name);
+		if (u.gender)
+			pList->SetItemText(i, 1, _T("男"));
+		else
+			pList->SetItemText(i, 1, _T("女"));
+		pList->SetItemText(i, 2, u.ID);
+		pList->SetItemText(i, 3, u.math);
+		pList->SetItemText(i, 4, u.program);
+		pList->SetItemText(i, 5, u.sum);
 		i++;
 	}
 	file.Close();

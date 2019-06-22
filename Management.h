@@ -1,12 +1,10 @@
 #pragma once
-class Management
-{
-public:
-	void AddStudent();
-	void DeleteStudent();
-	void ChangeStudent();
-	void Sort();
-	void Save();
-	void Load();
-};
+#include <afxdialogex.h>
+//class Management :
+//	public CDialogEx
+//{
+//public:
+//	static int ExportToTxt(CString& strFilePath);
+//	static int ExportToExcel(CString& strFilePath);
+//};
 

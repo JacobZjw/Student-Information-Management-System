@@ -3,13 +3,13 @@
 
 // AddStudent 对话框
 
-class AddStudent : public CDialogEx
+class CAddStudentDlg : public CDialogEx
 {
-	DECLARE_DYNAMIC(AddStudent)
+	DECLARE_DYNAMIC(CAddStudentDlg)
 
 public:
-	AddStudent(CWnd* pParent = nullptr);   // 标准构造函数
-	virtual ~AddStudent();
+	CAddStudentDlg(CWnd* pParent = nullptr);   // 标准构造函数
+	virtual ~CAddStudentDlg();
 
 // 对话框数据
 #ifdef AFX_DESIGN_TIME
@@ -22,4 +22,5 @@ protected:
 	DECLARE_MESSAGE_MAP()
 public:
 	afx_msg void OnBnClickedAddStudentSave();
+	afx_msg void OnBnClickedFileSaveButton();
 };

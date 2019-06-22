@@ -36,10 +36,10 @@
     <ClInclude Include="Student.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="Management.h">
+    <ClInclude Include="CAddStudentDlg.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="AddStudent.h">
+    <ClInclude Include="Management.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
@@ -56,10 +56,10 @@
     <ClCompile Include="Student.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="Management.cpp">
+    <ClCompile Include="CAddStudentDlg.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="AddStudent.cpp">
+    <ClCompile Include="Management.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

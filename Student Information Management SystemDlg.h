@@ -39,4 +39,7 @@ public:
 	afx_msg void OnBnClickedFileLoadButton();
 	afx_msg void OnBnClickedSearchButton();
 	afx_msg void OnBnClickedSortButton();
+	CListCtrl m_List;
+	// 排序选择
+	CComboBox m_Combo;
 };
