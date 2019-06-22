@@ -60,7 +60,7 @@ BOOL CStudentInformationManagementSystemDlg::OnInitDialog()
 	// TODO: 在此添加额外的初始化代码
 
 	//在窗口左上角设置自己的姓名和学号（课设要求)
-	CString str = "学生成绩管理系统";    
+	CString str = "学生信息管理系统";    
 	//str += theApp.m_us.sName;
 	SetWindowText(str);
 
@@ -132,9 +132,10 @@ void CStudentInformationManagementSystemDlg::OnBnClickedAddButton()
 	CAddStudentDlg temp;
 	if (IDCANCEL == temp.DoModal())
 	{
-		CListCtrl* pList = (CListCtrl*)GetDlgItem(IDD_STUDENTINFORMATIONMANAGEMENTSYSTEM_DIALOG);  //关闭IDD_StudentSpecificAddDlg添加窗口，读取储存学生成绩的文件刷新学生成绩管理系统窗口
-		CStudentInformationManagementSystemDlg::LoadFile(pList);
-		OnBnClickedSortButton();//排序函数
+		//CListCtrl* pList = (CListCtrl*)GetDlgItem(IDD_STUDENTINFORMATIONMANAGEMENTSYSTEM_DIALOG);  //关闭IDD_StudentSpecificAddDlg添加窗口，读取储存学生成绩的文件刷新学生成绩管理系统窗口
+		LoadFile(&m_List);
+		//m_List.DeleteAllItems();
+		//OnBnClickedSortButton();//排序函数
 	}
 }
 
@@ -152,9 +153,50 @@ void CStudentInformationManagementSystemDlg::OnBnClickedDeleteButton()
 	{
 		while (pos)
 		{
+			Student temp;
 			int nItem = m_List.GetNextSelectedItem(pos);
+			m_List.GetItemText(nItem, 2, temp.ID, sizeof(temp.ID));
 			m_List.DeleteItem(nItem);
+
+			CFile file;
+			if (!file.Open("C:\\Users\\17810\\Desktop\\studentfile.dat", CFile::modeRead | CFile::shareDenyNone))
+			{
+				AfxMessageBox("文件无法打开！");
+				return;
+			}
+			CFile temporaryfile;
+			if (!temporaryfile.Open("C:\\Users\\17810\\Desktop\\tempfile.dat", CFile::modeCreate | CFile::modeWrite | CFile::shareDenyNone))
+			{
+				AfxMessageBox("文件无法打开！");
+				return;
+			}
+			Student u;
+			while (file.Read(&u, sizeof(u)) == sizeof(u)) //读取学生成绩储存文件，将未删除的学生信息写入临时文件temporaryfile中
+			{
+				if ((CString)u.ID == (CString)temp.ID)
+					continue;
+				temporaryfile.Write(&u, sizeof(u));
+			}
+			file.Close();
+			temporaryfile.Close();
+			if (!file.Open("C:\\Users\\17810\\Desktop\\studentfile.dat", CFile::modeCreate | CFile::modeWrite | CFile::shareDenyNone))
+			{
+				AfxMessageBox("文件无法打开！");
+				return;
+			}
+			if (!temporaryfile.Open("C:\\Users\\17810\\Desktop\\tempfile.dat", CFile::modeRead | CFile::shareDenyNone))
+			{
+				AfxMessageBox("文件无法打开！");
+				return;
+			}
+			while (temporaryfile.Read(&u, sizeof(u)) == sizeof(u))  //读取学生成绩储存文件，将临时文件temporarystudentfile.dat中学生信息写入真正存储学生信息的studentfile.dat中
+				file.Write(&u, sizeof(u));
+			LoadFile(&m_List);  //更新学生成绩管理系统界面的信息
+			//OnBnClickedSortButton();
+			return;
+
 		}
+
 	}
 }
 
@@ -208,9 +250,15 @@ void CStudentInformationManagementSystemDlg::LoadFile(CListCtrl* pList)
 	}
 	pList->DeleteAllItems();
 	Student u;
+	
 	int i = 0;
 	while (file.Read(&u, sizeof(u)) == sizeof(u))
 	{
+		int math= atoi(u.math);//类型转换
+		int program = atoi(u.program);
+		int sum = math + program;
+		_itoa_s(sum, u.sum, 10);//写入类中
+
 		pList->InsertItem(i, u.name);
 		if (u.gender)
 			pList->SetItemText(i, 1, _T("男"));

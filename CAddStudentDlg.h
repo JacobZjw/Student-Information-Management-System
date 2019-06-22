@@ -23,4 +23,8 @@ protected:
 public:
 	afx_msg void OnBnClickedAddStudentSave();
 	afx_msg void OnBnClickedFileSaveButton();
+	CString m_Name_Edit;
+	CString m_Program_Edit;
+	CString m_ID_Edit;
+	CString m_Math_Edit;
 };

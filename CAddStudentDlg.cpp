@@ -8,12 +8,17 @@
 #include "Student.h"
 #include "Management.h"
 
+
 // AddStudent 对话框
 
 IMPLEMENT_DYNAMIC(CAddStudentDlg, CDialogEx)
 
 CAddStudentDlg::CAddStudentDlg(CWnd* pParent /*=nullptr*/)
 	: CDialogEx(IDD_ADD_DIALOG, pParent)
+	, m_Name_Edit(_T(""))
+	, m_ID_Edit(_T(""))
+	, m_Program_Edit(_T(""))
+	, m_Math_Edit(_T(""))
 {
 
 }
@@ -25,6 +30,10 @@ CAddStudentDlg::~CAddStudentDlg()
 void CAddStudentDlg::DoDataExchange(CDataExchange* pDX)
 {
 	CDialogEx::DoDataExchange(pDX);
+	DDX_Text(pDX, IDC_NAME_EDIT, m_Name_Edit);
+	DDX_Text(pDX, IDC_PROGRAM_EDIT, m_Program_Edit);
+	DDX_Text(pDX, IDC_ID_EDIT, m_ID_Edit);
+	DDX_Text(pDX, IDC_MATH_EDIT, m_Math_Edit);
 }
 
 
@@ -38,7 +47,7 @@ END_MESSAGE_MAP()
 
 void CAddStudentDlg::OnBnClickedAddStudentSave()
 {
-	// TODO: 在此添加控件通知处理程序代码
+	 //TODO: 在此添加控件通知处理程序代码
 	Student temp;
 	GetDlgItemText(IDC_ID_EDIT, temp.ID, sizeof(temp.ID));  //将学号编辑框的内容写入u.sId
 	GetDlgItemText(IDC_NAME_EDIT, temp.name, sizeof(temp.name));  //将姓名编辑框的内容写入u.sName
@@ -66,5 +75,40 @@ void CAddStudentDlg::OnBnClickedAddStudentSave()
 	file.SeekToEnd();   //将指针移到文件末尾
 	file.Write(&temp, sizeof(temp));  //在文件末尾写入新的学生信息
 	AfxMessageBox("保存成功！"); //提示保存成功
+
+	CListCtrl* pList = (CListCtrl*)GetDlgItem(IDD_STUDENTINFORMATIONMANAGEMENTSYSTEM_DIALOG);  //关闭IDD_StudentSpecificAddDlg添加窗口，读取储存学生成绩的文件刷新学生成绩管理系统窗口
+
+	/*int i = 7;
+	while (file.Read(&temp2, sizeof(temp2)) == sizeof(temp2))
+	{
+		pList->InsertItem(i, temp2.name);
+		if (temp2.gender)
+			pList->SetItemText(i, 1, _T("男"));
+		else
+			pList->SetItemText(i, 1, _T("女"));
+		pList->SetItemText(i, 2, temp2.ID);
+		pList->SetItemText(i, 3, temp2.math);
+		pList->SetItemText(i, 4, temp2.program);
+		pList->SetItemText(i, 5, temp2.sum);
+		i++;
+	}*/
 	OnOK();
+
+	//UpdateData(TRUE);
+	//CListCtrl* pList = (CListCtrl*)GetDlgItem(IDD_STUDENTINFORMATIONMANAGEMENTSYSTEM_DIALOG);  //关闭IDD_StudentSpecificAddDlg添加窗口，读取储存学生成绩的文件刷新学生成绩管理系统窗口
+	//int i = 0;
+	//CString sum,program;
+	//program.Format(_T("%d"), m_Program_Edit);
+
+	//pList->InsertItem(i,m_Name_Edit);
+	//if (IDC_MAN == GetCheckedRadioButton(IDC_MAN, IDC_WOMEN))
+	//	pList->SetItemText(i, 1, _T("男"));
+	//else
+	//	pList->SetItemText(i, 1, _T("女"));
+	//pList->SetItemText(i, 2,m_ID_Edit );
+	//pList->SetItemText(i, 3, m_Math_Edit);
+	//pList->SetItemText(i, 4, m_Program_Edit);
+	//pList->SetItemText(i, 5, sum);
+	//UpdateData(FALSE);
+	//i++;
 }

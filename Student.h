@@ -9,7 +9,7 @@ public:
 	bool gender;
 	char math[5];
 	char program[5] = {0};
-	char sum[5] = { 0 };
+	char sum[5];
 	char* Sum();
 	friend class Management;
 };
