@@ -67,12 +67,12 @@ BOOL CStudentInformationManagementSystemDlg::OnInitDialog()
 	//设置数据显示区
 	
 	m_List.SetExtendedStyle(LVS_EX_FULLROWSELECT | LVS_EX_GRIDLINES);//整行选择、网格线
-	m_List.InsertColumn(1, "姓名", LVCFMT_CENTER, 80);
-	m_List.InsertColumn(2, "性别", LVCFMT_CENTER, 50);
-	m_List.InsertColumn(3, "学号", LVCFMT_CENTER, 100);
-	m_List.InsertColumn(4, "高等数学", LVCFMT_CENTER, 100);
-	m_List.InsertColumn(5, "课程设计", LVCFMT_CENTER, 100);
-	m_List.InsertColumn(6, "总分", LVCFMT_CENTER, 80);
+	m_List.InsertColumn(0, "姓名", LVCFMT_CENTER, 80);
+	m_List.InsertColumn(1, "性别", LVCFMT_CENTER, 50);
+	m_List.InsertColumn(2, "学号", LVCFMT_CENTER, 100);
+	m_List.InsertColumn(3, "高等数学", LVCFMT_CENTER, 100);
+	m_List.InsertColumn(4, "课程设计", LVCFMT_CENTER, 100);
+	m_List.InsertColumn(5, "总分", LVCFMT_CENTER, 80);
 	//排序函数
 
 	//读取文件函数
@@ -130,13 +130,8 @@ void CStudentInformationManagementSystemDlg::OnBnClickedAddButton()
 {
 	// TODO: 在此添加控件通知处理程序代码
 	CAddStudentDlg temp;
-	if (IDCANCEL == temp.DoModal())
-	{
-		//CListCtrl* pList = (CListCtrl*)GetDlgItem(IDD_STUDENTINFORMATIONMANAGEMENTSYSTEM_DIALOG);  //关闭IDD_StudentSpecificAddDlg添加窗口，读取储存学生成绩的文件刷新学生成绩管理系统窗口
-		LoadFile(&m_List);
-		//m_List.DeleteAllItems();
-		//OnBnClickedSortButton();//排序函数
-	}
+	temp.DoModal();
+	LoadFile(&m_List);
 }
 
 
@@ -228,6 +223,58 @@ void CStudentInformationManagementSystemDlg::OnBnClickedFileLoadButton()
 void CStudentInformationManagementSystemDlg::OnBnClickedSearchButton()
 {
 	// TODO: 在此添加控件通知处理程序代码
+	char str[20];
+	GetDlgItemText(IDC_SEARCH_EDIT, str, sizeof(str));  //获取编辑框的信息
+	if ((CString)str == "")
+	{
+		AfxMessageBox("请输入姓名或学号");
+		return;
+	}
+	//查找函数
+	int nCount = m_List.GetItemCount();
+	int i = 0, j = -1;
+	//////
+	
+	if (IDC_ID_RADIO== GetCheckedRadioButton(IDC_ID_RADIO, IDC_NAME_RADIO))
+	{
+
+		while (i < nCount)
+		{
+			if (m_List.GetItemText(i, 2) == (CString)str)
+			{
+				j = i;
+				break;
+			}
+			i++;
+		}
+
+	}
+	else
+	{
+
+		while (i < nCount)
+		{
+			if (m_List.GetItemText(i, 0) == (CString)str)
+			{
+				j = i;
+				break;
+			}
+			i++;
+		}
+
+	}
+
+	if (j!=-1)
+	{
+		//高亮显示选中行
+		m_List.SetFocus();
+		m_List.SetItemState(j, LVIS_SELECTED | LVIS_FOCUSED, LVIS_SELECTED | LVIS_FOCUSED);
+		m_List.EnsureVisible(j, FALSE);
+	}
+	else
+	{
+		AfxMessageBox(_T("没有找到该学生，请检查您的输入！"));
+	}
 }
 
 //排序按钮

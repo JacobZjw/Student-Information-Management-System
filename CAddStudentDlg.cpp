@@ -47,7 +47,10 @@ END_MESSAGE_MAP()
 
 void CAddStudentDlg::OnBnClickedAddStudentSave()
 {
+	
+	
 	 //TODO: 在此添加控件通知处理程序代码
+
 	Student temp;
 	GetDlgItemText(IDC_ID_EDIT, temp.ID, sizeof(temp.ID));  //将学号编辑框的内容写入u.sId
 	GetDlgItemText(IDC_NAME_EDIT, temp.name, sizeof(temp.name));  //将姓名编辑框的内容写入u.sName
@@ -57,12 +60,14 @@ void CAddStudentDlg::OnBnClickedAddStudentSave()
 		temp.gender=false;
 	GetDlgItemText(IDC_MATH_EDIT, temp.math, sizeof(temp.math));  //将高数编辑框的内容写入u.sHigher_math
 	GetDlgItemText(IDC_PROGRAM_EDIT, temp.program, sizeof(temp.program));  //将C++课设编辑框的内容写入u.sC_program
+
 	CFile file;
 	if (!file.Open("C:\\Users\\17810\\Desktop\\studentfile.dat", CFile::modeReadWrite | CFile::shareDenyNone))//文件无法打开，想办法创建新的文件类型
 	{
 		AfxMessageBox("添加失败,无法打开文件！");
 		return;
 	}
+
 	Student temp2;
 	while (file.Read(&temp2, sizeof(temp2)))   //读取学生文件信息，看学号是否重复
 	{
@@ -75,40 +80,5 @@ void CAddStudentDlg::OnBnClickedAddStudentSave()
 	file.SeekToEnd();   //将指针移到文件末尾
 	file.Write(&temp, sizeof(temp));  //在文件末尾写入新的学生信息
 	AfxMessageBox("保存成功！"); //提示保存成功
-
-	CListCtrl* pList = (CListCtrl*)GetDlgItem(IDD_STUDENTINFORMATIONMANAGEMENTSYSTEM_DIALOG);  //关闭IDD_StudentSpecificAddDlg添加窗口，读取储存学生成绩的文件刷新学生成绩管理系统窗口
-
-	/*int i = 7;
-	while (file.Read(&temp2, sizeof(temp2)) == sizeof(temp2))
-	{
-		pList->InsertItem(i, temp2.name);
-		if (temp2.gender)
-			pList->SetItemText(i, 1, _T("男"));
-		else
-			pList->SetItemText(i, 1, _T("女"));
-		pList->SetItemText(i, 2, temp2.ID);
-		pList->SetItemText(i, 3, temp2.math);
-		pList->SetItemText(i, 4, temp2.program);
-		pList->SetItemText(i, 5, temp2.sum);
-		i++;
-	}*/
 	OnOK();
-
-	//UpdateData(TRUE);
-	//CListCtrl* pList = (CListCtrl*)GetDlgItem(IDD_STUDENTINFORMATIONMANAGEMENTSYSTEM_DIALOG);  //关闭IDD_StudentSpecificAddDlg添加窗口，读取储存学生成绩的文件刷新学生成绩管理系统窗口
-	//int i = 0;
-	//CString sum,program;
-	//program.Format(_T("%d"), m_Program_Edit);
-
-	//pList->InsertItem(i,m_Name_Edit);
-	//if (IDC_MAN == GetCheckedRadioButton(IDC_MAN, IDC_WOMEN))
-	//	pList->SetItemText(i, 1, _T("男"));
-	//else
-	//	pList->SetItemText(i, 1, _T("女"));
-	//pList->SetItemText(i, 2,m_ID_Edit );
-	//pList->SetItemText(i, 3, m_Math_Edit);
-	//pList->SetItemText(i, 4, m_Program_Edit);
-	//pList->SetItemText(i, 5, sum);
-	//UpdateData(FALSE);
-	//i++;
 }
