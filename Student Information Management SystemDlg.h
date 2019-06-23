@@ -12,7 +12,7 @@ class CStudentInformationManagementSystemDlg : public CDialogEx
 public:
 	CStudentInformationManagementSystemDlg(CWnd* pParent = nullptr);	// 标准构造函数
 	void LoadFile(CListCtrl* pList);
-	int ExportToTXT(CString& strFilePath);
+	void SortStudent(int nSel);
 // 对话框数据
 #ifdef AFX_DESIGN_TIME
 	enum { IDD = IDD_STUDENTINFORMATIONMANAGEMENTSYSTEM_DIALOG };

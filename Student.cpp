@@ -9,7 +9,10 @@ Student ::~Student()
 {
 
 }
-//char* Student::Sum()
-//{
-//	
-//}
+void Student::Sum()
+{
+	int Math = atoi(math);//类型转换
+	int Program = atoi(program);
+	int all = Math + Program;
+	_itoa_s(all, sum, 10);//写入类中
+}
