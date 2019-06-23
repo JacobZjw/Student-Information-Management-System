@@ -9,6 +9,9 @@
 #include "afxdialogex.h"
 #include "CAddStudentDlg.h"
 #include "Student.h"
+#include <vector>
+#include <string>
+#include <sstream>
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -61,7 +64,7 @@ BOOL CStudentInformationManagementSystemDlg::OnInitDialog()
 
 	//在窗口左上角设置自己的姓名和学号（课设要求)
 	CString str = "学生信息管理系统";    
-	//str += theApp.m_us.sName;
+	//str += theApp.Student.name;
 	SetWindowText(str);
 
 	//设置数据显示区
@@ -83,7 +86,7 @@ BOOL CStudentInformationManagementSystemDlg::OnInitDialog()
 	m_Combo.AddString(_T("课设"));
 	m_Combo.AddString(_T("高数"));
 	m_Combo.AddString(_T("学号"));
-	int nsel = m_Combo.SetCurSel(2);
+	m_Combo.SetCurSel(2);
 	
 	return TRUE;  // 除非将焦点设置到控件，否则返回 TRUE
 }
@@ -141,7 +144,8 @@ void CStudentInformationManagementSystemDlg::OnBnClickedDeleteButton()
 	POSITION pos = m_List.GetFirstSelectedItemPosition();//没有删除文件
 	if (pos == NULL)
 	{
-		AfxMessageBox(_T("请选择要删除的成员！"));
+		MessageBox(_T("请选择要删除的成员！"), _T("警告"), MB_OK | MB_ICONWARNING);
+		//AfxMessageBox(_T("请选择要删除的成员！"), MB_OK | MB_ICONWARNING);
 		return;
 	}
 	else
@@ -156,13 +160,17 @@ void CStudentInformationManagementSystemDlg::OnBnClickedDeleteButton()
 			CFile file;
 			if (!file.Open("C:\\Users\\17810\\Desktop\\studentfile.dat", CFile::modeRead | CFile::shareDenyNone))
 			{
-				AfxMessageBox("文件无法打开！");
+				//AfxMessageBox("文件无法打开！");
+				MessageBox(_T("添加失败,无法打开文件！"), _T("错误"), MB_OK | MB_ICONERROR);
+
 				return;
 			}
 			CFile temporaryfile;
 			if (!temporaryfile.Open("C:\\Users\\17810\\Desktop\\tempfile.dat", CFile::modeCreate | CFile::modeWrite | CFile::shareDenyNone))
 			{
-				AfxMessageBox("文件无法打开！");
+				//AfxMessageBox("文件无法打开！");
+				MessageBox(_T("添加失败,无法打开文件！"), _T("错误"), MB_OK | MB_ICONERROR);
+
 				return;
 			}
 			Student u;
@@ -211,12 +219,188 @@ void CStudentInformationManagementSystemDlg::OnBnClickedDataButton()
 void CStudentInformationManagementSystemDlg::OnBnClickedFileSaveButton()
 {
 	// TODO: 在此添加控件通知处理程序代码
+	if (m_List.GetItemCount()<=0)
+	{
+		MessageBox(_T("没有需要保存的数据"), _T("警告"), MB_OK | MB_ICONWARNING);
+		return;
+	}
+	char szFilters[] = _T("txt文件(*.txt)|*.txt|所有文件(*.*)|*.*||");
+	CFileDialog dlg(FALSE, _T("txt"), _T("学生信息"), OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT, szFilters, this);
+	if (dlg.DoModal() != IDOK)
+		return;
+	CString strFilePath;
+	strFilePath = dlg.GetPathName();
+	
+	DWORD dwre = GetFileAttributes(strFilePath);
+	if (dwre!=(DWORD)-1)
+	{
+		DeleteFile(strFilePath);
+	}
+
+	//保存文件数据
+
+	FILE* fp;
+	fopen_s(&fp, strFilePath, "w");
+	char str[1024];
+	if (fp==NULL)
+	{
+		printf("Save file ERROR\n");
+		return;
+	}
+
+	int nHeadNum = m_List.GetHeaderCtrl()->GetItemCount();
+	LVCOLUMN lvcol;
+	char str_out[256];
+	int nColNum;
+	nColNum = 0;
+	lvcol.mask = LVCF_TEXT;
+	lvcol.pszText = str_out;
+	lvcol.cchTextMax = 256;
+	while (m_List.GetColumn(nColNum,&lvcol))
+	{
+		nColNum++;
+		fprintf_s(fp, "%-30s", lvcol.pszText);
+	}
+	fprintf_s(fp, "\n", lvcol.pszText);
+
+	//读取数据
+	int nRow = m_List.GetItemCount();
+	for (int i=0;i<nRow;i++)
+	{
+		for (int j=0;j<nColNum;j++)
+		{
+			CString str_data = m_List.GetItemText(i, j);
+			fprintf_s(fp, "%-30s", str_data);
+		}
+		fprintf_s(fp, "\n");
+	}
+	fclose(fp);
+	MessageBox(_T("数据保存成功"), _T("成功"), MB_OK | MB_ICONASTERISK);
+
 }
 
 //导入数据按钮
 void CStudentInformationManagementSystemDlg::OnBnClickedFileLoadButton()
 {
 	// TODO: 在此添加控件通知处理程序代码
+	char szFilters[] = _T("txt文件(*.txt)|*.txt|所有文件(*.*)|*.*||");
+	CFileDialog dlg(TRUE, _T("txt"), _T("学生信息"), OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT, szFilters, this);
+	dlg.m_ofn.lpstrTitle = _T("导入数据");
+
+	if (dlg.DoModal() != IDOK)
+		return;
+	CString strFilePath;
+	strFilePath = dlg.GetPathName();
+
+	DWORD dwre = GetFileAttributes(strFilePath);
+	if (dwre != (DWORD)-1)
+	{
+		m_List.DeleteAllItems();
+		int nColumnCount = m_List.GetHeaderCtrl()->GetItemCount();
+		for (int i = 0; i < nColumnCount; i++)
+		{
+			m_List.DeleteColumn(0);
+		}
+	}
+	else
+	{
+		MessageBox(_T("文件不存在！"), _T("警告"), MB_OK | MB_ICONWARNING);
+		return;
+	}
+
+	FILE* fp;
+	fopen_s(&fp, strFilePath, "r");
+	char str[1024];
+	if (fp==NULL)
+	{
+		printf("Open file ERROR\n");
+		return;
+	}
+	int iRow = 0;
+
+	//m_List.InsertColumn(0, "姓名", LVCFMT_CENTER, 80);
+	CFile file;
+	if (!file.Open("C:\\Users\\17810\\Desktop\\studentfile.dat", CFile::modeCreate | CFile::modeWrite | CFile::shareDenyNone))
+	{
+		AfxMessageBox("文件无法打开！");
+		return;
+	}
+	Student u;
+	///////////////////////////////////////
+	int nLength = 0;
+	while (fgets(str,sizeof(str),fp))
+	{
+		char _index[256] = "temp";
+		sprintf_s(_index, "%d", iRow);
+		m_List.InsertItem(iRow, _index);
+
+		std::string s = str;
+		std::string buf;
+		std::stringstream ss(s);
+
+		std::vector<std::string> tokens;
+		int i = 0;
+		int j = 0;
+		while (ss >> buf)
+		{
+			if (buf.size()>0)
+			{
+				tokens.push_back(buf);
+				if (iRow==0)
+				{
+					
+						m_List.InsertColumn(++j, _T(tokens.at(i).c_str()), LVCFMT_CENTER, 100);
+
+				}
+				else
+				{
+					m_List.SetItemText(iRow,i, tokens.at(i).c_str());
+					char temp[20];
+					strcpy_s(temp, tokens.at(i).c_str());
+					switch (i)
+					{
+					case 0:
+						strcpy_s(u.name, tokens.at(i).c_str());
+						break;
+					case 1:
+						if (strcmp("女", temp))
+						{
+							u.gender = true;
+							break;
+						}
+						else
+						{
+							u.gender = false;
+							break;
+						}
+					case 2:
+						strcpy_s(u.ID, tokens.at(i).c_str());
+						break;
+					case 3:
+						strcpy_s(u.math, tokens.at(i).c_str());
+						break;
+					case 4:
+						strcpy_s(u.program, tokens.at(i).c_str());
+						break;
+					case 5:
+						strcpy_s(u.sum, tokens.at(i).c_str());
+						break;
+					default:
+						break;
+					}
+				}
+
+				i++;
+			}
+		}
+		iRow++;
+		if (iRow>1)
+			file.Write(&u, sizeof(u));
+	}
+	fclose(fp);
+	m_List.DeleteItem(0);
+	file.Close();
+	LoadFile(&m_List);
 }
 
 //查找按钮
@@ -227,7 +411,8 @@ void CStudentInformationManagementSystemDlg::OnBnClickedSearchButton()
 	GetDlgItemText(IDC_SEARCH_EDIT, str, sizeof(str));  //获取编辑框的信息
 	if ((CString)str == "")
 	{
-		AfxMessageBox("请输入姓名或学号");
+		//AfxMessageBox("请输入姓名或学号");
+		MessageBox(_T("请输入姓名或学号"), _T("警告"), MB_OK | MB_ICONWARNING);
 		return;
 	}
 	//查找函数
@@ -281,8 +466,7 @@ void CStudentInformationManagementSystemDlg::OnBnClickedSearchButton()
 void CStudentInformationManagementSystemDlg::OnBnClickedSortButton()
 {
 	// TODO: 在此添加控件通知处理程序代码
-	CComboBox* pComb = (CComboBox*)GetDlgItem(IDD_STUDENTINFORMATIONMANAGEMENTSYSTEM_DIALOG);
-	int nSel = pComb->GetCurSel();
+	int nSel = m_Combo.GetCurSel();//取得当前选中项
 	//SortStudent(nSel);//排序函数还没写
 
 }
@@ -297,7 +481,6 @@ void CStudentInformationManagementSystemDlg::LoadFile(CListCtrl* pList)
 	}
 	pList->DeleteAllItems();
 	Student u;
-	
 	int i = 0;
 	while (file.Read(&u, sizeof(u)) == sizeof(u))
 	{

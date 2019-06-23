@@ -64,7 +64,8 @@ void CAddStudentDlg::OnBnClickedAddStudentSave()
 	CFile file;
 	if (!file.Open("C:\\Users\\17810\\Desktop\\studentfile.dat", CFile::modeReadWrite | CFile::shareDenyNone))//文件无法打开，想办法创建新的文件类型
 	{
-		AfxMessageBox("添加失败,无法打开文件！");
+		//AfxMessageBox("添加失败,无法打开文件！");
+		MessageBox(_T("添加失败,无法打开文件！"), _T("错误"), MB_OK | MB_ICONERROR);
 		return;
 	}
 
@@ -73,12 +74,14 @@ void CAddStudentDlg::OnBnClickedAddStudentSave()
 	{
 		if ((CString)temp2.ID == (CString)temp.ID)
 		{
-			AfxMessageBox("该学生已存在！");
+			//AfxMessageBox("该学生已存在！");
+			MessageBox(_T("该学生已存在！"), _T("警告"), MB_OK | MB_ICONWARNING);
 			return;
 		}
 	}
 	file.SeekToEnd();   //将指针移到文件末尾
 	file.Write(&temp, sizeof(temp));  //在文件末尾写入新的学生信息
-	AfxMessageBox("保存成功！"); //提示保存成功
+	//AfxMessageBox("保存成功！"); //提示保存成功
+	MessageBox(_T("保存成功！"), _T("成功"), MB_OK|MB_ICONASTERISK );
 	OnOK();
 }
