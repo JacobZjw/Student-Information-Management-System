@@ -186,7 +186,7 @@ void CStudentInformationManagementSystemDlg::OnBnClickedChangeButton()
 void CStudentInformationManagementSystemDlg::OnBnClickedDataButton()
 {
 	// TODO: 在此添加控件通知处理程序代码
-	ShellExecute(NULL, "open", "C:\\Users\\17810\\Desktop\\课程设计—学生信息管理系统\\DrawData\\Debug\\DrawData.exe", NULL, NULL, SW_SHOWNORMAL);
+	ShellExecute(NULL, "open", "C:\\Users\\17810\\source\\repos\\课程设计—学生信息管理系统\\DrawData\\Debug\\DrawData.exe", NULL, NULL, SW_SHOWNORMAL);
 
 }
 
