@@ -11,8 +11,6 @@ class CStudentInformationManagementSystemDlg : public CDialogEx
 // 构造
 public:
 	CStudentInformationManagementSystemDlg(CWnd* pParent = nullptr);	// 标准构造函数
-	void LoadFile(CListCtrl* pList);
-	void SortStudent(int nSel);
 // 对话框数据
 #ifdef AFX_DESIGN_TIME
 	enum { IDD = IDD_STUDENTINFORMATIONMANAGEMENTSYSTEM_DIALOG };
@@ -43,4 +41,5 @@ public:
 	CListCtrl m_List;
 	// 排序选择
 	CComboBox m_Combo;
+	friend class Management;
 };

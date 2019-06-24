@@ -10,6 +10,7 @@
 
 #include "resource.h"		// 主符号
 #include "Student.h"
+#include "Management.h"
 
 // CStudentInformationManagementSystemApp:
 // 有关此类的实现，请参阅 Student Information Management System.cpp
@@ -20,6 +21,7 @@ class CStudentInformationManagementSystemApp : public CWinApp
 public:
 	CStudentInformationManagementSystemApp();
 	Student m_student;
+	Management m_Management;
 	bool Tell = false;
 	int nCOUNT;
 // 重写

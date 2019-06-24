@@ -88,7 +88,6 @@ void CAddStudentDlg::OnBnClickedAddStudentSave()
 	CFile file;
 	if (!file.Open("./studentfile.dat", CFile::modeReadWrite | CFile::shareDenyNone))//文件无法打开，想办法创建新的文件类型
 	{
-		//AfxMessageBox("添加失败,无法打开文件！");
 		MessageBox(_T("添加失败,无法打开文件！"), _T("错误"), MB_OK | MB_ICONERROR);
 		return;
 	}
