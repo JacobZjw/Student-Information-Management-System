@@ -147,7 +147,7 @@ void CStudentInformationManagementSystemDlg::OnBnClickedDeleteButton()
 void CStudentInformationManagementSystemDlg::OnBnClickedChangeButton()
 {
 	// TODO: 在此添加控件通知处理程序代码
-	POSITION pos = m_List.GetFirstSelectedItemPosition();//没有删除文件
+	POSITION pos = m_List.GetFirstSelectedItemPosition();//找到当前选中行
 	if (pos == NULL)
 	{
 		MessageBox(_T("请选择要修改的成员！"), _T("警告"), MB_OK | MB_ICONWARNING);
@@ -155,6 +155,7 @@ void CStudentInformationManagementSystemDlg::OnBnClickedChangeButton()
 	}
 	else
 	{
+		//将当前选中行数据写入临时变量
 		Student temp;
 		int nItem = m_List.GetNextSelectedItem(pos);
 		char tempgender[20];
@@ -172,10 +173,10 @@ void CStudentInformationManagementSystemDlg::OnBnClickedChangeButton()
 			temp.gender = false;
 		}
 
-
+		//将临时变量写入全局变量m_student方便CAddStudentDlg调用
 		theApp.m_student=temp;
-		theApp.Tell = true;
-		theApp.m_Management.ChangeStudent(&m_List);
+		theApp.Tell = true;//CAddStudentDlg区分添加信息还是修改信息的关键
+		theApp.m_Management.ChangeStudent(&m_List);//
 		theApp.Tell = false;
 	}
 
@@ -205,19 +206,20 @@ void CStudentInformationManagementSystemDlg::OnBnClickedFileLoadButton()
 void CStudentInformationManagementSystemDlg::OnBnClickedSearchButton()
 {
 	// TODO: 在此添加控件通知处理程序代码
+	//将编辑框内容写入临时变量str
 	char str[20];
 	GetDlgItemText(IDC_SEARCH_EDIT, str, sizeof(str));  //获取编辑框的信息
 	if ((CString)str == "")
 	{
-		//AfxMessageBox("请输入姓名或学号");
 		MessageBox(_T("请输入姓名或学号"), _T("警告"), MB_OK | MB_ICONWARNING);
 		return;
 	}
+
 	//查找函数
-	int nCount = m_List.GetItemCount();
+	int nCount = m_List.GetItemCount();//listCtrl中的总行数
 	int i = 0, j = -1;
 
-	if (IDC_ID_RADIO== GetCheckedRadioButton(IDC_ID_RADIO, IDC_NAME_RADIO))
+	if (IDC_ID_RADIO== GetCheckedRadioButton(IDC_ID_RADIO, IDC_NAME_RADIO))//如果输入的是学号
 	{
 
 		while (i < nCount)
