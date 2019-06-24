@@ -44,6 +44,7 @@ BOOL CAddStudentDlg::OnInitDialog()
 
 	//在窗口左上角设置自己的姓名和学号（课设要求)
 	CString str = "添加或修改信息";
+	SetWindowText(str);
 
 	if (theApp.Tell)
 	{
@@ -72,8 +73,6 @@ END_MESSAGE_MAP()
 
 void CAddStudentDlg::OnBnClickedAddStudentSave()
 {
-	
-	
 	 //TODO: 在此添加控件通知处理程序代码
 
 	Student temp;
@@ -87,7 +86,7 @@ void CAddStudentDlg::OnBnClickedAddStudentSave()
 	GetDlgItemText(IDC_PROGRAM_EDIT, temp.program, sizeof(temp.program));  //将C++课设编辑框的内容写入u.sC_program
 
 	CFile file;
-	if (!file.Open("C:\\Users\\17810\\Desktop\\studentfile.dat", CFile::modeReadWrite | CFile::shareDenyNone))//文件无法打开，想办法创建新的文件类型
+	if (!file.Open("./studentfile.dat", CFile::modeReadWrite | CFile::shareDenyNone))//文件无法打开，想办法创建新的文件类型
 	{
 		//AfxMessageBox("添加失败,无法打开文件！");
 		MessageBox(_T("添加失败,无法打开文件！"), _T("错误"), MB_OK | MB_ICONERROR);
@@ -108,16 +107,16 @@ void CAddStudentDlg::OnBnClickedAddStudentSave()
 		}
 		file.Close();
 
-		if (!file.Open("C:\\Users\\17810\\Desktop\\studentfile.dat", CFile::modeWrite | CFile::shareDenyNone))
+		if (!file.Open("./studentfile.dat", CFile::modeWrite | CFile::shareDenyNone))
 		{
-			AfxMessageBox("修改失败，文件打不开！");
+			MessageBox(_T("无法打开文件！"), _T("错误"), MB_OK | MB_ICONERROR);
 			return;
 		}
 
 		file.SeekToBegin(); // 重新设置file文件的写指针时期刚好在要修改的学生信息那里
 		file.Seek(i * sizeof(temp), CFile::current);
 		file.Write(&temp, sizeof(temp));  //用新的信息对原来的信息进行覆盖，实现修改
-		AfxMessageBox("修改保存成功！");
+		MessageBox(_T("修改保存成功！"), _T("成功"), MB_OK | MB_ICONASTERISK);
 		file.Close();
 		theApp.Tell = false;
 	}

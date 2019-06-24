@@ -159,19 +159,18 @@ void CStudentInformationManagementSystemDlg::OnBnClickedDeleteButton()
 			m_List.DeleteItem(nItem);
 
 			CFile file;
-			if (!file.Open("C:\\Users\\17810\\Desktop\\studentfile.dat", CFile::modeRead | CFile::shareDenyNone))
+			if (!file.Open("./studentfile.dat", CFile::modeRead | CFile::shareDenyNone))
 			{
 				//AfxMessageBox("文件无法打开！");
-				MessageBox(_T("添加失败,无法打开文件！"), _T("错误"), MB_OK | MB_ICONERROR);
+				MessageBox(_T("无法打开文件！"), _T("错误"), MB_OK | MB_ICONERROR);
 
 				return;
 			}
 			CFile temporaryfile;
-			if (!temporaryfile.Open("C:\\Users\\17810\\Desktop\\tempfile.dat", CFile::modeCreate | CFile::modeWrite | CFile::shareDenyNone))
+			if (!temporaryfile.Open("./tempfile.dat", CFile::modeCreate |  CFile::modeWrite | CFile::shareDenyNone))
 			{
 				//AfxMessageBox("文件无法打开！");
-				MessageBox(_T("添加失败,无法打开文件！"), _T("错误"), MB_OK | MB_ICONERROR);
-
+				MessageBox(_T("无法打开文件！"), _T("错误"), MB_OK | MB_ICONERROR);
 				return;
 			}
 			Student u;
@@ -183,14 +182,14 @@ void CStudentInformationManagementSystemDlg::OnBnClickedDeleteButton()
 			}
 			file.Close();
 			temporaryfile.Close();
-			if (!file.Open("C:\\Users\\17810\\Desktop\\studentfile.dat", CFile::modeCreate | CFile::modeWrite | CFile::shareDenyNone))
+			if (!file.Open("./studentfile.dat", CFile::modeCreate | CFile::modeWrite | CFile::shareDenyNone))
 			{
-				AfxMessageBox("文件无法打开！");
+				MessageBox(_T("无法打开文件！"), _T("错误"), MB_OK | MB_ICONERROR);
 				return;
 			}
-			if (!temporaryfile.Open("C:\\Users\\17810\\Desktop\\tempfile.dat", CFile::modeRead | CFile::shareDenyNone))
+			if (!temporaryfile.Open("./tempfile.dat", CFile::modeRead | CFile::shareDenyNone))
 			{
-				AfxMessageBox("文件无法打开！");
+				MessageBox(_T("无法打开文件！"), _T("错误"), MB_OK | MB_ICONERROR);
 				return;
 			}
 			while (temporaryfile.Read(&u, sizeof(u)) == sizeof(u))  //读取学生成绩储存文件，将临时文件temporarystudentfile.dat中学生信息写入真正存储学生信息的studentfile.dat中
@@ -249,6 +248,8 @@ void CStudentInformationManagementSystemDlg::OnBnClickedChangeButton()
 void CStudentInformationManagementSystemDlg::OnBnClickedDataButton()
 {
 	// TODO: 在此添加控件通知处理程序代码
+	ShellExecute(NULL, "open", "C:\\Users\\17810\\Desktop\\课程设计—学生信息管理系统\\DrawData\\Debug\\DrawData.exe", NULL, NULL, SW_SHOWNORMAL);
+
 }
 
 //导出数据按钮
@@ -356,9 +357,9 @@ void CStudentInformationManagementSystemDlg::OnBnClickedFileLoadButton()
 
 	//m_List.InsertColumn(0, "姓名", LVCFMT_CENTER, 80);
 	CFile file;
-	if (!file.Open("C:\\Users\\17810\\Desktop\\studentfile.dat", CFile::modeCreate | CFile::modeWrite | CFile::shareDenyNone))
+	if (!file.Open("./studentfile.dat", CFile::modeCreate | CFile::modeWrite | CFile::shareDenyNone))
 	{
-		AfxMessageBox("文件无法打开！");
+		MessageBox(_T("无法打开文件！"), _T("错误"), MB_OK | MB_ICONERROR);
 		return;
 	}
 	Student u;
@@ -494,7 +495,7 @@ void CStudentInformationManagementSystemDlg::OnBnClickedSearchButton()
 	}
 	else
 	{
-		AfxMessageBox(_T("没有找到该学生，请检查您的输入！"));
+		MessageBox(_T("没有找到该学生，请检查输入！"), _T("警告"), MB_OK | MB_ICONWARNING);
 	}
 }
 
@@ -509,9 +510,10 @@ void CStudentInformationManagementSystemDlg::OnBnClickedSortButton()
 void CStudentInformationManagementSystemDlg::LoadFile(CListCtrl* pList)
 {
 	CFile file;
-	if (!file.Open("C:\\Users\\17810\\Desktop\\studentfile.dat", CFile::modeRead | CFile::shareDenyNone))
+	if (!file.Open("./studentfile.dat", CFile::modeRead | CFile::modeCreate |CFile::modeNoTruncate|CFile::shareDenyNone))
 	{
-		AfxMessageBox("添加失败，文件打不开！");
+		//AfxMessageBox("添加失败，文件打不开！");
+		MessageBox(_T("无法打开文件"), _T("错误"), MB_OK | MB_ICONERROR);
 		return;
 	}
 	pList->DeleteAllItems();
@@ -539,30 +541,30 @@ void CStudentInformationManagementSystemDlg::LoadFile(CListCtrl* pList)
 	file.Close();
 }
 
-bool sort_id(Student a, Student b)  //学号（ID）大小比较函数
+bool sort_id(Student a, Student b)  //学号大小比较函数
 {
 	return _ttoi((CString)a.ID) < _ttoi((CString)b.ID);  //将char转换成CString,在转化成int
 }
 bool sort_math(Student a, Student b)
 {
-	return _ttoi((CString)a.math) > _ttoi((CString)b.math);  //高数（Higher_math）大小比较函数
+	return _ttoi((CString)a.math) > _ttoi((CString)b.math);  //高数比较成绩函数
 }
 bool sort_sum(Student a, Student b)
 {
-	return (_ttoi((CString)a.program) + _ttoi((CString)a.math)) > (_ttoi((CString)b.program) + _ttoi((CString)b.math));  //总分大小比较函数
+	return (_ttoi((CString)a.program) + _ttoi((CString)a.math)) > (_ttoi((CString)b.program) + _ttoi((CString)b.math));  //总成绩比较函数
 }
 bool sort_program(Student a, Student b)
 {
-	return _ttoi((CString)a.program) > _ttoi((CString)b.program);   //c++（C_program）大小比较函数
+	return _ttoi((CString)a.program) > _ttoi((CString)b.program);   //大小比较函数
 }
 
 void CStudentInformationManagementSystemDlg::SortStudent(int nSel)
 {
 	Student SomeStudent[100];
 	CFile file;
-	if (!file.Open("C:\\Users\\17810\\Desktop\\studentfile.dat", CFile::modeRead | CFile::shareDenyNone))
+	if (!file.Open("./studentfile.dat", CFile::modeRead | CFile::shareDenyNone))//C:\\Users\\17810\\Desktop\\studentfile.dat
 	{
-		AfxMessageBox("文件无法打开,无法排序！");
+		MessageBox(_T("无法打开文件！"), _T("错误"), MB_OK | MB_ICONERROR);
 		return;
 	}
 	int i = 0;
@@ -582,9 +584,9 @@ void CStudentInformationManagementSystemDlg::SortStudent(int nSel)
 	if (nSel == 3)    //3是总成绩排序
 		std::sort(SomeStudent, SomeStudent + i, sort_sum);
 
-	if (!file.Open("C:\\Users\\17810\\Desktop\\studentfile.dat", CFile::modeCreate | CFile::modeWrite | CFile::shareDenyNone))
+	if (!file.Open("./studentfile.dat", /*CFile::modeCreate |*/ CFile::modeWrite | CFile::shareDenyNone))
 	{
-		AfxMessageBox("文件无法打开,无法排序！");
+		MessageBox(_T("无法打开文件！"), _T("错误"), MB_OK | MB_ICONERROR);
 		return;
 	}
 	int t = 0;
