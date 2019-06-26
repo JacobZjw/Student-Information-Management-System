@@ -26,7 +26,9 @@
 CStudentInformationManagementSystemDlg::CStudentInformationManagementSystemDlg(CWnd* pParent /*=nullptr*/)
 	: CDialogEx(IDD_STUDENTINFORMATIONMANAGEMENTSYSTEM_DIALOG, pParent)
 {
-	m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
+	//m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
+	m_hIcon = AfxGetApp()->LoadIcon(IDI_ICON1);
+
 }
 
 void CStudentInformationManagementSystemDlg::DoDataExchange(CDataExchange* pDX)
@@ -89,6 +91,7 @@ BOOL CStudentInformationManagementSystemDlg::OnInitDialog()
 	m_Combo.AddString(_T("学号"));
 	m_Combo.SetCurSel(2);
 	
+
 	return TRUE;  // 除非将焦点设置到控件，否则返回 TRUE
 }
 
