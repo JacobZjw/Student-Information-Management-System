@@ -83,5 +83,8 @@
     <Image Include="MFC图标.ico">
       <Filter>资源文件</Filter>
     </Image>
+    <Image Include="res\MFC图标.ico">
+      <Filter>资源文件</Filter>
+    </Image>
   </ItemGroup>
 </Project>

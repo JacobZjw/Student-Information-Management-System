@@ -221,6 +221,7 @@
   <ItemGroup>
     <Image Include="..\MFC图标.ico" />
     <Image Include="MFC图标.ico" />
+    <Image Include="res\MFC图标.ico" />
     <Image Include="res\Student Information Management System.ico" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
