@@ -3,7 +3,7 @@
 
 bool sort_id(Student a, Student b)  //学号大小比较函数
 {
-	return _ttoi((CString)a.ID) < _ttoi((CString)b.ID);  //将char转换成CString,在转化成int
+	return _ttoi((CString)a.ID) < _ttoi((CString)b.ID);  //将char转换成CString,再转化成int
 }
 bool sort_math(Student a, Student b)
 {
@@ -98,7 +98,7 @@ void Management::SortStudents(CListCtrl* pList, int nSel)
 {
 	Student SomeStudent[100];
 	CFile file;
-	if (!file.Open("./studentfile.dat", CFile::modeRead | CFile::shareDenyNone))//C:\\Users\\17810\\Desktop\\studentfile.dat
+	if (!file.Open("./studentfile.dat", CFile::modeRead | CFile::shareDenyNone))
 	{
 		MessageBox(_T("无法打开文件！"), _T("错误"), MB_OK | MB_ICONERROR);
 		return;
@@ -306,7 +306,7 @@ void Management::GetFromFile(CListCtrl* pList)
 				else
 				{
 					pList->SetItemText(iRow, i, tokens.at(i).c_str());
-					char temp[20];
+					char temp[20];//临时储存性别，便于判断
 					strcpy_s(temp, tokens.at(i).c_str());
 					switch (i)
 					{

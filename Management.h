@@ -2,10 +2,7 @@
 #include <afxdialogex.h>
 #include <afxdialogex.h>
 
-//#include "pch.h"
-//#include "framework.h"
 #include "Student Information Management SystemDlg.h"
-//#include "afxdialogex.h"
 #include <iostream>
 #include "CAddStudentDlg.h"
 #include "Student.h"
@@ -25,7 +22,7 @@ public:
 	void DeleteStudent(CListCtrl* pList);
 	void ChangeStudent(CListCtrl* pList);
 	void SortStudents(CListCtrl* pList,int nSel);
-	void LoadFile(CListCtrl* pList);
+	void LoadFile(CListCtrl* pList);//º”‘ÿ ˝æ›
 	void SaveToFile(CListCtrl* pList);
 	void GetFromFile(CListCtrl* pList);
 };

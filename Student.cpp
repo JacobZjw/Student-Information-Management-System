@@ -3,11 +3,9 @@
 
 Student::Student()
 {
-
 }
 Student ::~Student()
 {
-
 }
 void Student::Sum()
 {

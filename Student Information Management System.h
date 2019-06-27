@@ -20,10 +20,9 @@ class CStudentInformationManagementSystemApp : public CWinApp
 {
 public:
 	CStudentInformationManagementSystemApp();
-	Student m_student;
-	Management m_Management;
-	bool Tell = false;
-	int nCOUNT;
+	Student m_student;//用来实现两个窗口之间的数据传输
+	Management m_Management;//用来实现增加、删除等操作
+	bool Tell = false;//用来判断调用添加修改窗口时是要添加还是修改数据
 // 重写
 public:
 	virtual BOOL InitInstance();

@@ -27,7 +27,7 @@ CStudentInformationManagementSystemDlg::CStudentInformationManagementSystemDlg(C
 	: CDialogEx(IDD_STUDENTINFORMATIONMANAGEMENTSYSTEM_DIALOG, pParent)
 {
 	//m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
-	m_hIcon = AfxGetApp()->LoadIcon(IDI_ICON1);
+	m_hIcon = AfxGetApp()->LoadIcon(IDI_ICON1);//设置图标
 
 }
 
@@ -67,7 +67,6 @@ BOOL CStudentInformationManagementSystemDlg::OnInitDialog()
 
 	//在窗口左上角设置自己的姓名和学号（课设要求)
 	CString str = "学生信息管理系统";    
-	//str += theApp.Student.name;
 	SetWindowText(str);
 
 	//设置数据显示区
@@ -180,7 +179,7 @@ void CStudentInformationManagementSystemDlg::OnBnClickedChangeButton()
 		theApp.m_student=temp;
 		theApp.Tell = true;//CAddStudentDlg区分添加信息还是修改信息的关键
 		theApp.m_Management.ChangeStudent(&m_List);//
-		theApp.Tell = false;
+		theApp.Tell = false;//还原默认值（默认为添加数据）
 	}
 
 }
@@ -220,7 +219,7 @@ void CStudentInformationManagementSystemDlg::OnBnClickedSearchButton()
 
 	//查找函数
 	int nCount = m_List.GetItemCount();//listCtrl中的总行数
-	int i = 0, j = -1;
+	int i = 0, j = -1; // j是返回值，返回查找到的数据的行号
 
 	if (IDC_ID_RADIO== GetCheckedRadioButton(IDC_ID_RADIO, IDC_NAME_RADIO))//如果输入的是学号
 	{

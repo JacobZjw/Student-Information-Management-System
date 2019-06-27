@@ -8,7 +8,7 @@ public:
 	char ID[20];
 	bool gender;
 	char math[5];
-	char program[5] = {0};
+	char program[5];
 	char sum[5];
 	void Sum();
 	friend class Management;
